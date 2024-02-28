@@ -2,7 +2,8 @@ class Block {
     static EVENTS = {
       INIT: "init",
       FLOW_CDM: "flow:component-did-mount",
-      FLOW_RENDER: "flow:render"
+      FLOW_RENDER: "flow:render",
+      FLOW_CDU: "flow:component-did-update"
     };
   
     _element = null;
@@ -42,6 +43,7 @@ class Block {
     
     init() {
         this._createResources();
+        this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
     
     _componentDidMount() {
@@ -51,7 +53,9 @@ class Block {
     // Может переопределять пользователь, необязательно трогать
     componentDidMount(oldProps) {}
     
-    dispatchComponentDidMoun() {}
+    dispatchComponentDidMount() {
+        this._eventBus().emit(Block.EVENTS.FLOW_CDM);
+    }
     
     _componentDidUpdate(oldProps, newProps) {
         const response = this.componentDidUpdate(oldProps, newProps);
@@ -63,9 +67,7 @@ class Block {
     }
   
     setProps = nextProps => {
-        if (!nextProps) {
-        return;
-        }
+        if (!nextProps) return;
     
         Object.assign(this.props, nextProps);
     };
@@ -91,11 +93,36 @@ class Block {
     }
     
     _makePropsProxy(props) {
-        // Можно и так передать this
-        // Такой способ больше не применяется с приходом ES6+
-        const self = this;
-    
-        return props;
+        const proxyProps = new Proxy(props, {
+            get(target, prop) {
+              if (prop.indexOf('_') === 0) {
+                throw new Error('Нет прав');
+              }
+              
+              const value = target[prop];
+              return typeof value === "function" ? value.bind(target) : value;
+            },
+            
+            set(target, prop, value) {
+              if (prop.indexOf('_') === 0) {
+                throw new Error('Нет прав');
+              }
+              
+              target[prop] = value;
+              return true
+            },
+            
+            deleteProperty(target, prop) {
+              if (prop.indexOf('_') === 0) {
+                throw new Error('Нет прав');
+              }
+              
+              delete target[prop];
+              return true
+            }
+          });
+
+          return proxyProps;
     }
     
     _createDocumentElement(tagName) {
