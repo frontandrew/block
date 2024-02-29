@@ -130,7 +130,11 @@ class Block {
         return document.createElement(tagName);
     }
     
-    show() {}
+    show() {
+        this.getContent().style.display = "block";
+    }
     
-    hide() {}
+    hide() {
+        this.getContent().style.display = "none";
+    }
 }
