@@ -32,20 +32,21 @@ setTimeout(() => {
 }, 1000);
 
 setTimeout(() => {
-    delete button.props;
+    delete button.props.text;
     console.log('BTN delete props:', { ...button })
 }, 2000);
 
 setTimeout(() => {
     button.setProps({
         foo: 'bar',
+        bar: () => {}
     });
     console.log('BTN write props:', { ...button })
 }, 3000);
 
 setTimeout(() => {
     button.setProps({
-        text: 'foobar',
+        bar: 'foo',
     });
     console.log('BTN write props:', { ...button })
 }, 4000);
