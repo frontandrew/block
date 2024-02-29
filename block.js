@@ -21,6 +21,7 @@ class Block {
             tagName,
             props
         };
+        this.count = 0; // temporary
   
         this.props = this._makePropsProxy(props);
     
@@ -34,6 +35,7 @@ class Block {
         eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
         eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     }
   
     _createResources() {
@@ -59,6 +61,12 @@ class Block {
     
     _componentDidUpdate(oldProps, newProps) {
         const response = this.componentDidUpdate(oldProps, newProps);
+        if (response) {
+            this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+            return true;
+        }
+        
+        return false;
     }
     
     // Может переопределять пользователь, необязательно трогать
@@ -67,9 +75,14 @@ class Block {
     }
   
     setProps = nextProps => {
-        if (!nextProps) return;
-    
-        Object.assign(this.props, nextProps);
+        if (!nextProps) throw Error("Свойства не переданы");
+        console.log('NewProps:', nextProps)
+
+        for (const [key, value] of Object.entries(nextProps)) {
+            this.props[key] = value
+        }
+
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU);
     };
     
     get element() {
@@ -83,6 +96,8 @@ class Block {
         // Нужно не в строку компилировать (или делать это правильно),
         // либо сразу в DOM-элементы возвращать из compile DOM-ноду
         this._element.innerHTML = block;
+        this.count = ++this.count;
+        console.log(`render count: ${this.count}`)
     }
     
     // Может переопределять пользователь, необязательно трогать
@@ -93,6 +108,7 @@ class Block {
     }
     
     _makePropsProxy(props) {
+        console.log('makeProxyProps', props)
         const proxyProps = new Proxy(props, {
             get(target, prop) {
               if (prop.indexOf('_') === 0) {
@@ -104,7 +120,7 @@ class Block {
             },
             
             set(target, prop, value) {
-              if (prop.indexOf('_') === 0) {
+              if (prop.indexOf('_') === 0 || !value) {
                 throw new Error('Нет прав');
               }
               
@@ -112,17 +128,12 @@ class Block {
               return true
             },
             
-            deleteProperty(target, prop) {
-              if (prop.indexOf('_') === 0) {
+            deleteProperty() {
                 throw new Error('Нет прав');
-              }
-              
-              delete target[prop];
-              return true
             }
-          });
+        });
 
-          return proxyProps;
+        return proxyProps;
     }
     
     _createDocumentElement(tagName) {
