@@ -28,4 +28,29 @@ setTimeout(() => {
     button.setProps({
         text: 'Click me, please',
     });
+    console.log('BTN write props:', { ...button })
 }, 1000);
+
+setTimeout(() => {
+    delete button.props;
+    console.log('BTN delete props:', { ...button })
+}, 2000);
+
+setTimeout(() => {
+    button.setProps({
+        foo: 'bar',
+    });
+    console.log('BTN write props:', { ...button })
+}, 3000);
+
+setTimeout(() => {
+    button.setProps({
+        text: 'foobar',
+    });
+    console.log('BTN write props:', { ...button })
+}, 4000);
+
+setTimeout(() => {
+    button = []
+    console.log('BTN write props:', { ...button })
+}, 5000);
