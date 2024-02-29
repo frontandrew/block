@@ -29,8 +29,6 @@ class Block {
     
         this._registerEvents(eventBus);
         eventBus.emit(Block.EVENTS.INIT);
-
-        Object.seal(this);
     }
   
     _registerEvents(eventBus) {
@@ -114,7 +112,7 @@ class Block {
         const proxyProps = new Proxy(props, {
             get(target, prop) {
               if (prop.indexOf('_') === 0) {
-                throw new Error('Нет прав');
+                throw Error('Нет прав');
               }
               
               const value = target[prop];
@@ -123,7 +121,7 @@ class Block {
             
             set(target, prop, value) {
               if (prop.indexOf('_') === 0 || !value) {
-                throw new Error('Нет прав');
+                throw Error('Нет прав');
               }
               
               target[prop] = value;
@@ -131,7 +129,7 @@ class Block {
             },
             
             deleteProperty() {
-                throw new Error('Нет прав');
+                throw Error('Нет прав');
             }
         });
 
