@@ -29,6 +29,8 @@ class Block {
     
         this._registerEvents(eventBus);
         eventBus.emit(Block.EVENTS.INIT);
+
+        Object.seal(this);
     }
   
     _registerEvents(eventBus) {
