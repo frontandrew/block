@@ -1,3 +1,5 @@
+import { EventBus } from '../event-bus';
+
 class Block {
     static EVENTS = {
       INIT: "init",
@@ -149,3 +151,5 @@ class Block {
         this.getContent().style.display = "none";
     }
 }
+
+export { Block }
