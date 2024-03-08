@@ -1,22 +1,45 @@
-import { Button } from './shared'
+import { Button, Text } from './shared';
 
 function render(query, block) {
     const root = document.querySelector(query);
     root.appendChild(block.getContent());
     return root;
 }
-  
-const button = new Button({
-    text: 'Click me',
-});
-  
-// app — это class дива в корне DOM
-render(".app", button);
 
-// Через секунду контент изменится сам, достаточно обновить пропсы
+// const title = new Text({
+//     text: 'H1 Title Text',
+//     type: 'h1',
+// })
+// setTimeout(() => {
+//     render(".app", title);
+// }, 1000);
+
+
+const button = new Button({
+    label: 'Click!!',
+    type: 'text',
+})  
+
+setTimeout(() => {
+    render(".app", button);
+}, 2000);
 setTimeout(() => {
     button.setProps({
-        text: 'Click me, please',
+        label: 'Click me, please',
+        type: 'filled',
     });
-    console.log('BTN write props:', { ...button })
-}, 1000);
+    // console.log('button write props:', { ...button })
+}, 3000);
+// setTimeout(() => {
+//     title.setProps();
+//     console.log('title write props:', { ...button })
+// }, 4000);
+
+
+
+
+
+window.components = {
+    button,
+    // title,
+}
