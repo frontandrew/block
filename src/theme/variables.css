@@ -1,0 +1,29 @@
+:root {
+    --main-color: #3369F3;
+    --second-color: #E4EDFD;
+    --error-color: #FF0000;
+    --text-color-main: #1E1E1E;
+    --text-color-light: #999;
+    --text-color-contrast: #FFFFFF;
+    --text-hided-color: #FFFFFF00;
+    --shadow-color: #00000024;
+    --visited-link-color: yellow;
+    --disabled-color: var(--text-color-light);
+    --modal-background-color: #00000040;
+
+    --font-family-base: 'Inter', sans-serif;
+    --font-family-accent: san-serif;
+    --font-size: 16px;
+
+    --background-color-default: #FFFFFF;
+    --background-color-contrast: #EFEFEF;
+    --background-color-tint: #FBFBFB;
+
+    --item-hover-color: #E4EDFD;
+
+    --surface-border: 0.75em;
+    --surface-shadow: 0 0 6px 0 var(--shadow-color);
+
+    --z-index-content: 1000;
+    --z-index-modal: 2000;
+}
