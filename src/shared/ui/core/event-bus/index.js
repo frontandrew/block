@@ -7,7 +7,7 @@ class EventBus {
         if (!this.listeners[event]) {
             this.listeners[event] = [];
         }
-        console.log(`ON::${event}:${callback}`)
+        // console.log(`ON::${event}:${JSON.stringify(callback)}`)
         this.listeners[event].push(callback);
     }
   
@@ -15,7 +15,7 @@ class EventBus {
         if (!this.listeners[event]) {
             throw new Error(`Нет события: ${event}`);
         }
-        console.log(`OFF::${event}:${callback}`)
+        // console.log(`OFF::${event}:${JSON.stringify(callback)}`)
         this.listeners[event] = this.listeners[event].filter(
             listener => listener !== callback
         );
@@ -25,7 +25,7 @@ class EventBus {
         if (!this.listeners[event]) {
             throw new Error(`Нет события: ${event}`);
         }
-        console.log(`EMIT::${event}:${{...args}}`)
+        // console.log(`EMIT::${event}:${JSON.stringify({...args})}`)
         this.listeners[event].forEach(function(listener) {
             listener(...args);
         });

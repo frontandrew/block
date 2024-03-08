@@ -1,0 +1,40 @@
+.text {
+    color: var(--text-color-main);
+    font-family: var(--font-family-base);
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.text_title {
+    font-weight: 600;
+}
+
+.text_rigth {
+    text-align: right;
+}
+
+.text_label {
+    font-size: 0.54rem;
+    font-weight: 500;
+}
+
+.text_info {
+    font-size: 0.5rem;
+    font-weight: 400;
+}
+
+.text_light-color {
+    color: var(--text-color-light);
+}
+
+.text_error-color {
+    color: var(--error-color);
+}
+
+.text_contrast-color {
+    color: var(--text-color-contrast);
+}
+
+.text_main-color {
+    color: var(--main-color);
+}

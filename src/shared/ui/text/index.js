@@ -3,10 +3,11 @@ import { Block } from '../core';
 import template from './template.hbs?raw';
 import './style.css'
 
-export class Button extends Block {
+export class Text extends Block {
     constructor(props) {
-        // this.props.type = 'filled';
         super(props);
+        // this.props.type = 'span';
+        // this.props.text = '';
     }
 
     render() {
