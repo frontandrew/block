@@ -1,3 +1,17 @@
-<button class="button button__{{type}}"{{#if page}} page={{page}}{{/if}}>
+{{log this}}
+
+<button
+    class="button button__{{#if type}}{{type}}{{else}}filled{{/if}}"
+    {{#if page}} page={{page}}{{/if}}
+>
     {{label}}
 </button>
+
+{{!-- <button
+    class="button button__{{#if type}}{{type}}{{else}}filled{{/if}}"
+    {{#if page}} page={{page}}{{/if}}
+>
+    {{#if label}}
+        {{> Text text=label type="span" classes="text_title text_contrast-color"}}
+    {{/if}}
+</button> --}}

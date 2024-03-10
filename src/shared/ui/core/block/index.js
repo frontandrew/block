@@ -2,190 +2,160 @@ import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
  
 import { EventBus } from '../event-bus';
-
-class Block {
+export class Block {
     static EVENTS = {
-        INIT: "init",
-        FLOW_CDM: "flow:component-did-mount",
-        FLOW_RENDER: "flow:render",
-        FLOW_CDU: "flow:component-did-update"
+      INIT: "init",
+      FLOW_CDM: "flow:component-did-mount",
+      FLOW_RENDER: "flow:render",
+      FLOW_CDU: "flow:component-did-update"
     };
   
-    #element = null;
-    id = null;
-    #meta = null;
-    count = 0;
+    _element = null;
+    _meta = null;
+    id = nanoid(6)
   
-    constructor(properties = {}) {
-        const { props, children } = this.#separatePropsAndChildren(properties)
+    /** JSDoc
+     * @param {string} tagName
+     * @param {Object} props
+     *
+     * @returns {void}
+     */
+    constructor(tagName = "div", props = {}) {
         const eventBus = new EventBus();
-
-        this.id = nanoid(8);
-        this.#meta = { props };
-        this.children = children;
-        this.props = this.#makePropsProxy(props);    
+        this._meta = {
+            tagName,
+            props
+        };
+        this.count = 0; // temporary
+  
+        this.props = this._makePropsProxy(props);
+    
         this.eventBus = () => eventBus;
     
-        this.#registerEvents(eventBus);
+        this._registerEvents(eventBus);
         eventBus.emit(Block.EVENTS.INIT);
     }
-
-    #separatePropsAndChildren(args) {
-        const props = {};
-        const children = {};
+  
+    _registerEvents(eventBus) {
+        eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+        eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    }
+  
+    _createResources() {
+        const { tagName } = this._meta;
+        this._element = this._createDocumentElement(tagName);
+    }
     
-        Object.entries(args).forEach(([key, value]) => {
-            if (value instanceof Block) {
-                children[key] = value;
-            } else {
-                props[key] = value;
-            }
-        });
-    
-        return { props, children };
-    }
-
-    #registerEvents(eventBus) {
-        eventBus.on(Block.EVENTS.INIT, this.#init.bind(this));
-        eventBus.on(Block.EVENTS.FLOW_CDM, this.#componentDidMount.bind(this));
-        eventBus.on(Block.EVENTS.FLOW_RENDER, this.#render.bind(this));
-        eventBus.on(Block.EVENTS.FLOW_CDU, this.#componentDidUpdate.bind(this));
-    }
-
-    #addEvents() {
-        const { events = {} } = this.props;
-
-        Object.keys(events).forEach(eventName => {
-            this.#element?.addEventListener(eventName, events[eventName]);
-        });
-    }
-
-    #init() {
-        console.log(`INIT[${this.#element}:${this.id}]`)
-        this.init();
+    init() {
+        console.log(`INIT[${this.id}]`)
+        this._createResources();
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
-
-    init() {}
-
-    #componentDidMount() {
-        console.log(`#CDM[${this.#element.localName}:${this.id}]`)
+    
+    _componentDidMount() {
         this.componentDidMount();
     }
-
+    
+    // Может переопределять пользователь, необязательно трогать
     componentDidMount(oldProps) {}
-
+    
     dispatchComponentDidMount() {
-        console.log(`#dispCDM[${this.#element.localName}:${this.id}]`)
-        this.eventBus().emit(Block.EVENTS.FLOW_CDM);
-        Object.values(this.children).forEach(child => child.dispatchComponentDidMount());
+        this._eventBus().emit(Block.EVENTS.FLOW_CDM);
     }
-
-    #componentDidUpdate(oldProps, newProps) {
-        console.log(`#CDU[${this.#element.localName}:${this.id}]`, newProps)
-
+    
+    _componentDidUpdate(oldProps, newProps) {
         const response = this.componentDidUpdate(oldProps, newProps);
         if (response) {
             this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
             return true;
         }
-
+        
         return false;
     }
-
+    
+    // Может переопределять пользователь, необязательно трогать
     componentDidUpdate(oldProps, newProps) {
         return true;
     }
-
-    setProps = nextProps => {
-        if (!nextProps) {
+  
+    setProps (nextProps) {
+        if (!nextProps || !Object.keys(nextProps)?.length) {
             console.warn(`Properties not passed.`);
             return
         }
+
+        const currentProps = this.props;
+
         console.log(`---`)
-        console.log(`SETPRS[${this.#element.localName}:${this.id}]`, nextProps)
+        console.log(`SETPRS[${this.id}]`, { currentProps }, {})
 
-        this.props = { ...this.props, ...nextProps }
-
-        // Object.assign(this.props, nextProps);
-
-        // for (const [key, value] of Object.entries(nextProps)) {
-        //     console.log(`set[${key}]:${this.props[key]} > ${value}`)
-        //     this.props[key] = value
-        // }
-        console.log(`---`)
-        this.eventBus().emit(Block.EVENTS.FLOW_CDU);
-    };
-
-    get element() {
-        return this.#element;
-    }
-
-    compile(template, context) {
-        const contextAndStubs = {...context, __refs: this.refs};
-    
-        Object.entries(this.children).forEach(([key, child]) => {
-            contextAndStubs[key] = `<div data-id="${child.id}"></div>`;
-        })
-    
-        const html = Handlebars.compile(template)(contextAndStubs);    
-        const temp = document.createElement('template');
-    
-        temp.innerHTML = html;
-        contextAndStubs.__children?.forEach(({embed}) => {
-            embed(temp.content);
-        });
-    
-        Object.values(this.children).forEach((child) => {
-            const stub = temp.content.querySelector(`[data-id="${child.id}"]`);
-            stub?.replaceWith(child.getContent());
-        })
-    
-        return temp.content;
-    }
-
-    #render() {
-        const fragment = this.compile(this.render(), this.props);    
-        const newElement = fragment.firstElementChild;
-    
-        if (this.#element) {
-          this.#element.replaceWith(newElement);
+        for (const [key, value] of Object.entries(nextProps)) {
+            console.log(`set[${key}]:${this.props[key]} > ${value}`)
+            this.props[key] = value
         }
+        console.log(`---`)
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU, currentProps, nextProps);
+    };
     
-        this.#element = newElement;    
-        this.#addEvents();
-        console.log(`RNDR[${this.#element.localName}:${this.id}]::${++this.count}`, this.props)
+    get element() {
+        return this._element;
     }
+    
+    _render() {
+        // Этот небезопасный метод для упрощения логики
+        // Используйте шаблонизатор из npm или напишите свой безопасный
+        // Нужно не в строку компилировать (или делать это правильно),
+        // либо сразу в DOM-элементы возвращать из compile DOM-ноду
+        
+        const block = Handlebars.compile(this.render())(this.props);
+        // console.log('BLOCK:', block)
+        this._element.innerHTML = block;
 
+        console.log(`RNDR[${this.id}]::${++this.count}`, this.props)
+    }
+    
+    // Может переопределять пользователь, необязательно трогать
     render() {}
-
+    
     getContent() {
         return this.element;
     }
-
-    #makePropsProxy(props) {
-        // const self = this;
+    
+    _makePropsProxy(props) {
 
         const proxyProps = new Proxy(props, {
             get(target, prop) {
-                const value = target[prop];
-                return typeof value === "function" ? value.bind(target) : value;
+              if (prop.indexOf('_') === 0) {
+                throw Error('Нет прав');
+              }
+              
+              const value = target[prop];
+              return typeof value === "function" ? value.bind(target) : value;
             },
-
+            
             set(target, prop, value) {
-                // const oldTarget = {...target}
-                target[prop] = value;
-  
-                // self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
-                return true
+              if (prop.indexOf('_') === 0 || !value) {
+                throw Error('Нет прав');
+              }
+
+              console.log(`SET:[${this.id}]`, { target, prop })
+              
+              target[prop] = value;
+              return true
             },
             
             deleteProperty() {
-                throw new Error('Propertys delete is not allowed.');
-            },
+                throw Error('Propertys delete is not allowed.');
+            }
         });
 
         return proxyProps;
+    }
+    
+    _createDocumentElement(tagName) {
+        return document.createElement(tagName);
     }
     
     show() {
@@ -196,5 +166,3 @@ class Block {
         this.getContent().style.display = "none";
     }
 }
-
-export { Block }
