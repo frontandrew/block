@@ -3,9 +3,9 @@ import { Block } from '../core';
 import template from './template.hbs?raw';
 import './style.css'
 
-export class Text extends Block {
+export class Form extends Block {
     constructor(props = {}) {
-        super({ tag: 'span', ...props });
+        super(props);
     }
 
     render() {

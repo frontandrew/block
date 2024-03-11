@@ -1,4 +1,4 @@
-import { BaseLayout, Button, Text } from './shared';
+import { BaseLayout, Button, Text, FieldsContainer, ActionsContainer, Form } from './shared';
 
 function render(query, block) {
     const root = document.querySelector(query);
@@ -14,12 +14,19 @@ function render(query, block) {
 //     render(".app", title);
 // }, 1000);
 
-const button = new Button({ label: 'SUBMIT' });
-const text = new Text({ text: 'Authorization',  tag: 'h1' });
+
+
+
+
 
 const layout = new BaseLayout({
-    mainTitle: text,
-    submitButton: button,
+    title: new Text({ text: 'Authorization',  tag: 'h1' }),
+    form: new Form({
+        fields: new FieldsContainer(),
+        actions: new ActionsContainer({
+            button: new Button({ label: 'Submit' }),
+        }),
+    }),
 });
 
 
@@ -34,12 +41,11 @@ render(".app", layout);
 // setTimeout(() => {
 //     button.setProps();
 // }, 1000);
-// setTimeout(() => {
-//     button.setProps({
-//         label: 'Click 2',
-//         type: 'text',
-//     });
-// }, 1000);
+setTimeout(() => {
+    button.setProps({
+        label: 'SUBMIT',
+    });
+}, 1000);
 // setTimeout(() => {
 //     button.setProps({
 //         label: 'Click 2',
