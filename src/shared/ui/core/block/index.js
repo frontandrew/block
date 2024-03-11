@@ -1,5 +1,7 @@
 import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
+
+import { deepEqual  } from '../../../tools';
  
 import { EventBus } from '../event-bus';
 export class Block {
@@ -74,7 +76,7 @@ export class Block {
         
         return false;
     }
-    
+        
     // Может переопределять пользователь, необязательно трогать
     componentDidUpdate(oldProps, newProps) {
         return true;
@@ -83,20 +85,23 @@ export class Block {
     setProps (nextProps) {
         if (!nextProps || !Object.keys(nextProps)?.length) {
             console.warn(`Properties not passed.`);
-            return
+            return;
         }
 
-        const currentProps = this.props;
+        const expectedProps = { ...this.props, ...nextProps };
+        const isEqual = deepEqual(this.props, expectedProps)
 
-        console.log(`---`)
-        console.log(`SETPRS[${this.id}]`, { currentProps }, {})
+        if (isEqual) {
+            console.warn(`Properties arent changed.`);
+            return;
+        }
 
         for (const [key, value] of Object.entries(nextProps)) {
             console.log(`set[${key}]:${this.props[key]} > ${value}`)
             this.props[key] = value
         }
-        console.log(`---`)
-        this.eventBus().emit(Block.EVENTS.FLOW_CDU, currentProps, nextProps);
+
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU, this.props, nextProps);
     };
     
     get element() {

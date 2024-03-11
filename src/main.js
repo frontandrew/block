@@ -16,7 +16,7 @@ function render(query, block) {
 
 
 const button = new Button({
-    label: 'Click!!',
+    label: 'Click 1',
 })
 
 render(".app", button);
@@ -24,13 +24,19 @@ render(".app", button);
 // setTimeout(() => {
 //     render(".app", button);
 // }, 2000);
+// setTimeout(() => {
+//     button.setProps();
+// }, 1000);
 setTimeout(() => {
-    button.setProps();
+    button.setProps({
+        label: 'Click 2',
+        type: 'text',
+    });
 }, 1000);
 setTimeout(() => {
     button.setProps({
-        label: 'Click me, please',
-        type: 'text',
+        label: 'Click 2',
+        type: 'filled',
     });
 }, 2000);
 // setTimeout(() => {
