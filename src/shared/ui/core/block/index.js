@@ -16,16 +16,30 @@ export class Block {
     _meta = null;
     _element = null;
   
-    constructor(props = {}) {
+    constructor(args = {}) {
         const eventBus = new EventBus();
-        this._meta = { props };
         this.count = 0; // temporary
-  
+
+        const { props, children } = this._separatePropsWithCildren(args);
+        
+        this._meta = { props, children };
+        this.children = this._makePropsProxy(children);
         this.props = this._makePropsProxy(props);
         this.eventBus = () => eventBus;
-        this._registerEvents(eventBus);
-
+        this._registerEvents(eventBus);        
         eventBus.emit(Block.EVENTS.INIT);
+    }
+
+    _separatePropsWithCildren(args) {
+        const props = {};
+        const children = {};
+
+        Object.entries(args).forEach(function([key, value]) {
+            if (value instanceof Block) children[key] = value;
+            else props[key] = value;
+        });
+
+        return { props, children };
     }
   
     _registerEvents(eventBus) {
@@ -38,6 +52,9 @@ export class Block {
     init() {
         console.log(`INIT[${this.id}]`);
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+        const children = Object.values(this.children);
+        console.log('Before children render', children)
+        if (children.length > 0) children.forEach((child) => this._element.append(child.element));
     }
     
     _componentDidMount() {
@@ -49,6 +66,7 @@ export class Block {
     
     dispatchComponentDidMount() {
         this._eventBus().emit(Block.EVENTS.FLOW_CDM);
+        console.log(`dsp:CDM[${this.id}]`)
     }
     
     _componentDidUpdate(oldProps, newProps) {

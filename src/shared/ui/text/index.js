@@ -6,8 +6,8 @@ import template from './template.hbs?raw';
 import './style.css'
 
 export class Text extends Block {
-    constructor(props) {
-        super(props);
+    constructor(props = {}) {
+        super({ tag: 'span', ...props });
     }
 
     render() {
