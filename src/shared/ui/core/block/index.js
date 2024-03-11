@@ -12,29 +12,19 @@ export class Block {
       FLOW_CDU: "flow:component-did-update"
     };
   
-    _element = null;
-    _meta = null;
     id = nanoid(6)
+    _meta = null;
+    _element = null;
   
-    /** JSDoc
-     * @param {string} tagName
-     * @param {Object} props
-     *
-     * @returns {void}
-     */
-    constructor(tagName = "div", props = {}) {
+    constructor(props = {}) {
         const eventBus = new EventBus();
-        this._meta = {
-            tagName,
-            props
-        };
+        this._meta = { props };
         this.count = 0; // temporary
   
         this.props = this._makePropsProxy(props);
-    
         this.eventBus = () => eventBus;
-    
         this._registerEvents(eventBus);
+
         eventBus.emit(Block.EVENTS.INIT);
     }
   
@@ -44,15 +34,9 @@ export class Block {
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     }
-  
-    _createResources() {
-        const { tagName } = this._meta;
-        this._element = this._createDocumentElement(tagName);
-    }
     
     init() {
-        console.log(`INIT[${this.id}]`)
-        this._createResources();
+        console.log(`INIT[${this.id}]`);
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
     
@@ -101,7 +85,7 @@ export class Block {
             this.props[key] = value
         }
 
-        this.eventBus().emit(Block.EVENTS.FLOW_CDU, this.props, nextProps);
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU, nextProps, this.props);
     };
     
     get element() {
@@ -114,10 +98,18 @@ export class Block {
         // Нужно не в строку компилировать (или делать это правильно),
         // либо сразу в DOM-элементы возвращать из compile DOM-ноду
         
-        const block = Handlebars.compile(this.render())(this.props);
-        // console.log('BLOCK:', block)
-        this._element.innerHTML = block;
+        const elementString = Handlebars.compile(this.render())(this.props);
+        const tempElement = document.createElement('div');
+        tempElement.insertAdjacentHTML('afterbegin', elementString.trim());
 
+        const resultElement = tempElement.firstElementChild;
+        resultElement.setAttribute('data-id', this.id);
+
+        if (this._element) {
+            this._element.replaceWith(resultElement);
+        }        
+
+        this._element = resultElement;
         console.log(`RNDR[${this.id}]::${++this.count}`, this.props)
     }
     
@@ -157,10 +149,6 @@ export class Block {
         });
 
         return proxyProps;
-    }
-    
-    _createDocumentElement(tagName) {
-        return document.createElement(tagName);
     }
     
     show() {

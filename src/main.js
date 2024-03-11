@@ -36,7 +36,7 @@ setTimeout(() => {
 setTimeout(() => {
     button.setProps({
         label: 'Click 2',
-        type: 'filled',
+        type: 'text',
     });
 }, 2000);
 // setTimeout(() => {
@@ -44,11 +44,14 @@ setTimeout(() => {
 //     console.log('title write props:', { ...button })
 // }, 4000);
 
+// const node = createNode(`<div data-id=${26254762456}></div>`);
 
+// console.log('NODE', node)
 
 
 
 window.components = {
     button,
     // title,
+    // node: createNode(`<div data-id=${26254762456}></div>`)
 }
