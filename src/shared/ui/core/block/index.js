@@ -55,10 +55,34 @@ export class Block {
     init() {
         console.log(`INIT[${this.id}]`);
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+        
         const children = Object.values(this.children);
-        // console.log('Before children render', children)
         if (children.length > 0) children.forEach((child) => this._element.append(child.element));
     }
+
+    _render() {
+        // Этот небезопасный метод для упрощения логики
+        // Используйте шаблонизатор из npm или напишите свой безопасный
+        // Нужно не в строку компилировать (или делать это правильно),
+        // либо сразу в DOM-элементы возвращать из compile DOM-ноду
+        
+        const elementString = Handlebars.compile(this.render())(this.props);
+        const tempElement = document.createElement('div');
+        tempElement.insertAdjacentHTML('afterbegin', elementString.trim());
+
+        const resultElement = tempElement.firstElementChild;
+        resultElement.setAttribute('data-id', this.id);
+
+        if (this._element) {
+            this._element.replaceWith(resultElement);
+        }        
+
+        this._element = resultElement;
+        this._attachEvents();
+        console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, { ...this._meta, elem: this._element })
+    }
+    
+    render() {}
     
     _componentDidMount() {
         this.componentDidMount();
@@ -113,31 +137,6 @@ export class Block {
         return this._element;
     }
     
-    _render() {
-        // Этот небезопасный метод для упрощения логики
-        // Используйте шаблонизатор из npm или напишите свой безопасный
-        // Нужно не в строку компилировать (или делать это правильно),
-        // либо сразу в DOM-элементы возвращать из compile DOM-ноду
-        
-        const elementString = Handlebars.compile(this.render())(this.props);
-        const tempElement = document.createElement('div');
-        tempElement.insertAdjacentHTML('afterbegin', elementString.trim());
-
-        const resultElement = tempElement.firstElementChild;
-        resultElement.setAttribute('data-id', this.id);
-
-        if (this._element) {
-            this._element.replaceWith(resultElement);
-        }        
-
-        this._element = resultElement;
-        this._attachEvents(this.events);
-        console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, { ...this._meta, elem: this._element })
-    }
-    
-    // Может переопределять пользователь, необязательно трогать
-    render() {}
-    
     getContent() {
         return this.element;
     }
@@ -179,7 +178,7 @@ export class Block {
 
         for (const [key, value] of Object.entries(this.events)) {
             console.log(`EVENT[${this._element?.nodeName + '::' + this.id}]::${this.count}`, { ...this._meta, elem: this._element })
-            this._element.addEventListener(key.toLowerCase().split(2), value)
+            this._element.addEventListener(key.toLowerCase().slice(2), value)
         }
     }
     
