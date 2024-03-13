@@ -1,4 +1,4 @@
-import { BaseLayout, Button, Text, FieldsContainer, ActionsContainer, Form } from './shared';
+import { BaseLayout, Button, Text, FieldsContainer, ActionsContainer, Form, Field } from './shared';
 
 function render(query, block) {
     const root = document.querySelector(query);
@@ -22,9 +22,23 @@ function render(query, block) {
 const layout = new BaseLayout({
     title: new Text({ text: 'Authorization',  tag: 'h1' }),
     form: new Form({
-        fields: new FieldsContainer(),
+        fields: new FieldsContainer({
+            login: new Field({
+                name: 'login',
+                type: 'text',
+                label: 'Login',
+            }),
+            password: new Field({
+                name: 'password',
+                type: 'password',
+                label: 'Password',
+            }),
+        }),
         actions: new ActionsContainer({
-            button: new Button({ label: 'Submit' }),
+            button: new Button({
+                label: 'Submit',
+                onClick: (e) => console.log('BUTTON CLICK:', e )
+            }),
         }),
     }),
 });
@@ -41,11 +55,11 @@ render(".app", layout);
 // setTimeout(() => {
 //     button.setProps();
 // }, 1000);
-setTimeout(() => {
-    button.setProps({
-        label: 'SUBMIT',
-    });
-}, 1000);
+// setTimeout(() => {
+//     button.setProps({
+//         label: 'SUBMIT',
+//     });
+// }, 1000);
 // setTimeout(() => {
 //     button.setProps({
 //         label: 'Click 2',
