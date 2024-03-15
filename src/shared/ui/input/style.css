@@ -1,0 +1,19 @@
+.input {
+    padding: 0.4em 0;
+
+    border-bottom: 1px solid;
+    border-color: var(--main-color);
+    margin-top: 0.8em;
+}
+
+.input::placeholder {
+    color: var(--text-hided-color);
+}
+
+.input_error {
+    border-color: var(--error-color);
+}
+
+.input:disabled {
+    border-color: var(--disabled-color);
+}

@@ -1,9 +1,10 @@
 import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
 
-import { deepEqual  } from '../../../tools';
+// import { deepEqual  } from '../../../tools';
  
 import { EventBus } from '../event-bus';
+
 export class Block {
     static EVENTS = {
       INIT: "init",
@@ -55,29 +56,29 @@ export class Block {
     init() {
         console.log(`INIT[${this.id}]`);
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
-        
-        const children = Object.values(this.children);
-        if (children.length > 0) children.forEach((child) => this._element.append(child.element));
     }
 
     _render() {
-        // Этот небезопасный метод для упрощения логики
-        // Используйте шаблонизатор из npm или напишите свой безопасный
-        // Нужно не в строку компилировать (или делать это правильно),
-        // либо сразу в DOM-элементы возвращать из compile DOM-ноду
+        Object.entries(this.children).forEach(([key, child]) => {
+            this.props[key] = `<div data-id="${child.id}"></div>`
+        })
         
-        const elementString = Handlebars.compile(this.render())(this.props);
+        const elementString = Handlebars.compile(this.render().trim())(this.props);
+        
         const tempElement = document.createElement('div');
         tempElement.insertAdjacentHTML('afterbegin', elementString.trim());
 
         const resultElement = tempElement.firstElementChild;
-        resultElement.setAttribute('data-id', this.id);
 
-        if (this._element) {
-            this._element.replaceWith(resultElement);
-        }        
+        Object.values(this.children).forEach((child) => {
+            const stub = resultElement.querySelector(`[data-id="${child.id}"]`);
+            stub?.replaceWith(child.getContent());
+        })
 
-        this._element = resultElement;
+        if (this._element) this._element.replaceWith(resultElement);
+        else this._element = resultElement;
+
+        // this._element.setAttribute('data-id', this.id);
         this._attachEvents();
         console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, { ...this._meta, elem: this._element })
     }
@@ -117,13 +118,14 @@ export class Block {
             return;
         }
 
-        const expectedProps = { ...this.props, ...nextProps };
-        const isEqual = deepEqual(this.props, expectedProps)
-
-        if (isEqual) {
-            console.warn(`Properties arent changed.`);
-            return;
-        }
+        /** Попытка сравнивать пропсы не удалась */
+        // const expectedProps = { ...this.props, ...nextProps };
+        // const isEqual = deepEqual(this.props, expectedProps)
+        // console.log(`set::equality:`, { curr: this.props, expc: expectedProps })
+        // if (isEqual) {
+        //     console.warn(`Properties arent changed.`);
+        //     return;
+        // }
 
         for (const [key, value] of Object.entries(nextProps)) {
             console.log(`set[${key}]:${this.props[key]} > ${value}`)
@@ -154,7 +156,7 @@ export class Block {
             },
             
             set(target, prop, value) {
-              if (prop.indexOf('_') === 0 || !value) {
+              if (prop.indexOf('_') === 0) {
                 throw Error('Нет прав');
               }
 
@@ -173,12 +175,18 @@ export class Block {
     }
 
     _attachEvents() {
-        // const { events = {} } = this.props;
         if (Object.keys(this.events).length <= 0) return;
 
         for (const [key, value] of Object.entries(this.events)) {
-            console.log(`EVENT[${this._element?.nodeName + '::' + this.id}]::${this.count}`, { ...this._meta, elem: this._element })
             this._element.addEventListener(key.toLowerCase().slice(2), value)
+        }
+    }
+
+    _detachEvents() {
+        if (Object.keys(this.events).length <= 0) return;
+
+        for (const [key, value] of Object.entries(this.events)) {
+            this._element.removeEventListener(key.toLowerCase().slice(2), value)
         }
     }
     

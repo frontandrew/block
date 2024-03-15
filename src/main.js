@@ -1,4 +1,4 @@
-import { BaseLayout, Button, Text, FieldsContainer, ActionsContainer, Form, Field } from './shared';
+import { BaseLayout, Button, Text, FieldsContainer, ActionsContainer, Form, Field, Input } from './shared';
 
 function render(query, block) {
     const root = document.querySelector(query);
@@ -6,69 +6,88 @@ function render(query, block) {
     return root;
 }
 
-// const title = new Text({
-//     text: 'H1 Title Text',
-//     type: 'h1',
-// })
-// setTimeout(() => {
-//     render(".app", title);
-// }, 1000);
+const layout = new class Layout extends BaseLayout {
+    constructor(props) {
+        super({
+            ...props,
 
+            title: new Text({ text: 'Authorization',  tag: 'h1' }),
 
+            form: new Form({
 
+                fields: new class Fields extends  FieldsContainer {
+                    constructor(props) {
+                        super({
+                            ...props,
 
+                            login: new Field({
+                                name: 'login',
+                                type: 'text', 
+                                label: 'Login',
+                                help: 'Exmple: useremail@domen.com',
+                                error: null,
+                                value: 'VALERA',
+                                // onChange: function(e) {
+                                //     console.log('CHANGE:', { e, value: e.target.value });
+                                // },
+                                // onInput: function(e) {
+                                //     console.log('INPUT:', { e, value: e.target.value, this: this });
+                                // },
+                            }),
 
+                            password: new Field({
+                                name: 'password',
+                                type: 'password',
+                                label: 'Password',
+                                help: 'Some help text',
+                                error: null,
+                                // onChange: function(e) {
+                                //     console.log('CHANGE:', { e, value: e.target.value });
+                                // },
+                                // onInput: function(e) {
+                                //     console.log('INPUT:', { e, value: e.target.value, this: this });
+                                // },
+                            }),
+                        })
+                    }
 
-const layout = new BaseLayout({
-    title: new Text({ text: 'Authorization',  tag: 'h1' }),
-    form: new Form({
-        fields: new FieldsContainer({
-            login: new Field({
-                name: 'login',
-                type: 'text',
-                label: 'Login',
+                    render () {
+                        return `{{#>FieldsContainer}}{{{login}}}{{{password}}}{{/FieldsContainer}}`
+                    }                    
+                    
+                },
+                
+                actions: new class Actions extends ActionsContainer {
+                    constructor(props) {
+                        super({ 
+                            ...props,
+                            button: new Button({
+                                label: 'Submit',
+                                onClick: function(e) {
+                                    console.log('BUTTON CLICK:', e);
+                                }
+                            }),
+                        })
+                    }
+                
+                    render() {
+                        return `{{#>ActionsContainer}}{{{button}}}{{/ActionsContainer}}`
+                    }
+                },
+
+                onSubmit: function(e) {            
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('FORM SUBMIT:', e );
+                    this
+                },
             }),
-            password: new Field({
-                name: 'password',
-                type: 'password',
-                label: 'Password',
-            }),
-        }),
-        actions: new ActionsContainer({
-            button: new Button({
-                label: 'Submit',
-                onClick: (e) => console.log('BUTTON CLICK:', e )
-            }),
-        }),
-    }),
-});
-
-
-
-
+        })
+    }
+    
+    render () {
+        return `{{#>BaseLayout}} {{{title}}} {{{form}}} {{/BaseLayout}}`
+    }
+};
 
 render(".app", layout);
-
-// setTimeout(() => {
-//     render(".app", button);
-// }, 2000);
-// setTimeout(() => {
-//     button.setProps();
-// }, 1000);
-// setTimeout(() => {
-//     button.setProps({
-//         label: 'SUBMIT',
-//     });
-// }, 1000);
-// setTimeout(() => {
-//     button.setProps({
-//         label: 'Click 2',
-//         type: 'text',
-//     });
-// }, 2000);
-// setTimeout(() => {
-//     title.setProps();
-//     console.log('title write props:', { ...button })
-// }, 4000);
-
-window.layout = layout;
