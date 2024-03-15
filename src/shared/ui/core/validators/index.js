@@ -1,39 +1,57 @@
 function password (string) {
+    const MIN_LENGTH = 8;
+
     let message = '';
     let status = false;
 
-    if (string.length < 8) {
-        message = 'Minimum of 8 characters. '
+    if (string.length < MIN_LENGTH) {
+        message = message.concat(`Minimum of ${MIN_LENGTH} characters. `);
         status = true;
     }
 
-    if (!string.search(/\s/)) {
-        massge.concat('Without whitespases. ')
+    if ((/\s/).test(string)) {
+        message = message.concat('Without whitespases. ');
         status = true;
     }
 
-    const atLeastCheckResult = '';
+    let atLeastCheckResult = '';
 
     if (!(/[A-Z]/).test(string)) {
-        atLeastCheckResult.concat(' capital letter,')
+        atLeastCheckResult = atLeastCheckResult.concat(' capital letter,');
         status = true;
     }
     if (!(/\d/).test(string)) {
-        atLeastCheckResult.concat(' digit,')
+        atLeastCheckResult = atLeastCheckResult.concat(' digit,');
         status = true;
     }
-    if (!(/\!\@\#\№\$\%\^\&\?\*\(\)\-\_\+\=\{\}\[\]\;\:\"\'\/\\\|\,\.\<\>/).test(string)) {
-        atLeastCheckResult.concat(' special symbol.')
+    if (!(/[\!\@\#\№\$\%\^\&\?\*\(\)\-\_\+\=\{\}\[\]\;\:\"\'\/\\\|\,\.\<\>]/).test(string)) {
+        atLeastCheckResult = atLeastCheckResult.concat(' special symbol.');
         status = true;
     }
 
     if (atLeastCheckResult.length > 0) {
-        message.concat('Must contain at least one ').concat(atLeastCheckResult)
+        message = message.concat('Must contain at least one more ', atLeastCheckResult);
     }
+    
+    if (message.trim().endsWith(',')) message = message.slice(0, -1).concat('.');
+    
+    console.warn({ atLeastCheckResult, message, status, })
+    return { hasError: status, textError: status ? message : '' }
+}
 
-    if (message.trim().endsWith(',')) message.slice(0, -1).concat('.')
+const username = login;
+function login (string) {
+    const MIN_LENGTH = 3;
+
+    let message = '';
+    let status = false;
+
+    if (string.length < MIN_LENGTH) {
+        message = message.concat(`Minimum of ${MIN_LENGTH} characters.`);
+        status = true;
+    }
 
     return { hasError: status, textError: status ? message : '' }
 }
 
-export const validators = { password };
+export const validators = { password, login, username };

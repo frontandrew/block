@@ -6,45 +6,49 @@ function render(query, block) {
     return root;
 }
 
-const passwordField = class PasswordField extends Field {
-    constructor(props) {
-        super({
-            ...props
-        })
-    }
-}
-
 const authForm = class AuthForm extends Form {
     constructor(props) {
         super({
             login: new Field(props.login),
-            password: new passwordField(props.password),
+            password: new Field(props.password),
             submit: new Button({
                 ...props.submit,
             }),
             onSubmit: (e) => {
-                console.warn('Submit!!')
                 e.preventDefault();
                 e.stopPropagation();
                 this.someFn()
+                this.processEvent(e)
                 return e
             },
-            onChange: () => {
-                this.validate()
+            onChange: (e) => {
+                this.processEvent(e)
             },
-            onReset: () => {}
+            onReset: (e) => {
+                this.processEvent(e)
+            },
         })
 
         this._count = 0;
-    }    
+    }
 
-    validate() {
-        const { login, password } = this.getPropsChildren();
-        console.log('FORM Values:', { login: login.value, password: password.value } );
+    processEvent(event) {
+        console.log('FORM EVENT', event)
+        const { type, target } = event;
+        if (type === 'change') {
+            this.children[target.name].validate()
+        }
+
+        if (type === 'submit') {
+
+        }
+        
+        if (type === 'reset') {
+
+        }
     }
 
     someFn() {
-        // this.children.submit.props = { label: `Submitted: ${++this._count}` }
         this.children.submit.setProps({
             label: `Submitted: ${++this._count}`
         })
@@ -83,7 +87,6 @@ const layout = class Layout extends BaseLayout {
                     name: 'login',
                     type: 'text', 
                     label: 'Login',
-                    help: 'Exmple: useremail@domen.com',
                     value: 'VALERA',
                 },
                 submit: {

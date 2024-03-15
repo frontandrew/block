@@ -60,7 +60,7 @@ export class Block {
     }
     
     init() {
-        console.log(`INIT[${this.id}]:`, this._meta);
+        // console.log(`INIT[${this.id}]:`, this._meta);
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
 
@@ -101,7 +101,7 @@ export class Block {
     
     dispatchComponentDidMount() {
         this._eventBus().emit(Block.EVENTS.FLOW_CDM);
-        console.log(`dsp:CDM[${this.id}]`)
+        console.log(`dispatch:CDM[${this.id}]`)
     }
     
     _componentDidUpdate(oldProps, newProps) {
@@ -130,14 +130,14 @@ export class Block {
         /** Попытка сравнивать пропсы не удалась */
         const expectedProps = { ...this.props, ...nextProps };
         const isEqual = deepEqual(this.props, expectedProps)
-        console.log(`set::equality:`, { curr: this.props, expc: expectedProps })
+        // console.log(`set::equality:`, { curr: this.props, expc: expectedProps })
         if (isEqual) {
             console.warn(`Properties arent changed.`);
             return;
         }
 
         for (const [key, value] of Object.entries(nextProps)) {
-            console.log(`set[${key}]:${this.props[key]} > ${value}`)
+            // console.log(`set[${key}]:${this.props[key]} > ${value}`)
             this.props[key] = value
         }
 
@@ -169,7 +169,7 @@ export class Block {
                 throw Error('Нет прав');
               }
 
-              console.log(`SET:[${this.id}]`, { target, prop })
+            //   console.log(`SET:[${this.id}]`, { target, prop })
               
               target[prop] = value;
               return true

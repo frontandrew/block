@@ -1,16 +1,16 @@
 <div class="field">
   <label for="{{name}}" class="field__label text text_light-color text_label">{{label}}</label>
   <input
-    class="field__input text {{#if error}}field__input_error text_error-color{{/if}}"
+    class="field__input text {{#if hasError}}field__input_error text_error-color{{/if}}"
     type="{{type}}"
     name="{{name}}"
     id="{{name}}"
     value="{{value}}"
     placeholder="{{name}}"
   />
-  {{#if error}}
-    <span class="field__help text text_error-color text_info">{{error}}</span>
+  {{#if hasError}}
+    <span class="field__help text text_error-color text_info">{{textError}}</span>
   {{else}}
-    <span class="field__help text text_light-color text_info">{{help}}</span>
+    <span class="field__help text text_light-color text_info">{{textHelp}}</span>
   {{/if}}  
 </div>
