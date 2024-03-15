@@ -6,80 +6,89 @@ function render(query, block) {
     return root;
 }
 
-const layout = new class Layout extends BaseLayout {
+const passwordField = class PasswordField extends Field {
+    constructor(props) {
+        super({
+            ...props
+        })
+    }
+}
+
+const authForm = class AuthForm extends Form {
+    constructor(props) {
+        super({
+            login: new Field(props.login),
+            password: new passwordField(props.password),
+            submit: new Button({
+                ...props.submit,
+            }),
+            onSubmit: (e) => {
+                console.warn('Submit!!')
+                e.preventDefault();
+                e.stopPropagation();
+                this.someFn()
+                return e
+            },
+            onChange: () => {
+                this.validate()
+            },
+            onReset: () => {}
+        })
+
+        this._count = 0;
+    }    
+
+    validate() {
+        const { login, password } = this.getPropsChildren();
+        console.log('FORM Values:', { login: login.value, password: password.value } );
+    }
+
+    someFn() {
+        // this.children.submit.props = { label: `Submitted: ${++this._count}` }
+        this.children.submit.setProps({
+            label: `Submitted: ${++this._count}`
+        })
+    }
+
+    render() {
+        return(
+            `{{#>Form}}
+                {{#>FieldsContainer}}
+                    {{{login}}}
+                    {{{password}}}
+                {{/FieldsContainer}}
+                {{#>ActionsContainer}}
+                    {{{submit}}}
+                {{/ActionsContainer}}
+            {{/Form}}`
+        )
+    }
+}
+
+
+const layout = class Layout extends BaseLayout {
     constructor(props) {
         super({
             ...props,
 
             title: new Text({ text: 'Authorization',  tag: 'h1' }),
 
-            form: new Form({
-
-                fields: new class Fields extends  FieldsContainer {
-                    constructor(props) {
-                        super({
-                            ...props,
-
-                            login: new Field({
-                                name: 'login',
-                                type: 'text', 
-                                label: 'Login',
-                                help: 'Exmple: useremail@domen.com',
-                                error: null,
-                                value: 'VALERA',
-                                // onChange: function(e) {
-                                //     console.log('CHANGE:', { e, value: e.target.value });
-                                // },
-                                // onInput: function(e) {
-                                //     console.log('INPUT:', { e, value: e.target.value, this: this });
-                                // },
-                            }),
-
-                            password: new Field({
-                                name: 'password',
-                                type: 'password',
-                                label: 'Password',
-                                help: 'Some help text',
-                                error: null,
-                                // onChange: function(e) {
-                                //     console.log('CHANGE:', { e, value: e.target.value });
-                                // },
-                                // onInput: function(e) {
-                                //     console.log('INPUT:', { e, value: e.target.value, this: this });
-                                // },
-                            }),
-                        })
-                    }
-
-                    render () {
-                        return `{{#>FieldsContainer}}{{{login}}}{{{password}}}{{/FieldsContainer}}`
-                    }                    
-                    
+            form: new authForm({
+                password: {
+                    name: 'password',
+                    type: 'password',
+                    label: 'Password',
                 },
-                
-                actions: new class Actions extends ActionsContainer {
-                    constructor(props) {
-                        super({ 
-                            ...props,
-                            button: new Button({
-                                label: 'Submit',
-                                onClick: function(e) {
-                                    console.log('BUTTON CLICK:', e);
-                                }
-                            }),
-                        })
-                    }
-                
-                    render() {
-                        return `{{#>ActionsContainer}}{{{button}}}{{/ActionsContainer}}`
-                    }
+                login: {                    
+                    name: 'login',
+                    type: 'text', 
+                    label: 'Login',
+                    help: 'Exmple: useremail@domen.com',
+                    value: 'VALERA',
                 },
-
-                onSubmit: function(e) {            
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('FORM SUBMIT:', e );
-                    this
+                submit: {
+                    label: 'Submit',
+                    type: 'submit',
                 },
             }),
         })
@@ -90,4 +99,4 @@ const layout = new class Layout extends BaseLayout {
     }
 };
 
-render(".app", layout);
+render(".app", new layout());

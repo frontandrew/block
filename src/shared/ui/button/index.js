@@ -8,7 +8,7 @@ Handlebars.registerPartial('Button', template)
 
 export class Button extends Block {
     constructor(props = {}) {
-        super({ type: 'filled', ...props });
+        super({ variant: 'filled', ...props });
     }
 
     render() {

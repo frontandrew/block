@@ -9,12 +9,13 @@ Handlebars.registerPartial('Field', template)
 export class Field extends Block {
     constructor(props = {}) {
         super({
-            onChange: (event) => this._setValue(event),
             ...props,
+            onChange: (event) => this._setValue(event),
         });
     }
     
     _setValue(event) {
+        console.warn('set field props')
         this.setProps({
             value: event.target.value
         })

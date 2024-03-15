@@ -1,6 +1,7 @@
 <button
-    class="button button__{{#if type}}{{type}}{{else}}filled{{/if}}"
+    class="button button__{{#if variant}}{{variant}}{{else}}filled{{/if}}"
     {{#if page}} page={{page}}{{/if}}
+    {{#if type}} type={{type}}{{/if}}
 >
     {{label}}
 </button>

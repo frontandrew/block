@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import { nanoid } from 'nanoid';
 
-// import { deepEqual  } from '../../../tools';
+import { deepEqual  } from '../../../tools';
  
 import { EventBus } from '../event-bus';
 
@@ -38,8 +38,14 @@ export class Block {
         const events = {};
 
         Object.entries(args).forEach(function([key, value]) {
-            if (value instanceof Block) children[key] = value;
-            if (key.startsWith('on')) events[key] = value;
+            if (value instanceof Block) {
+                children[key] = value;
+                return
+            }
+            if (key.startsWith('on')) {
+                events[key] = value;
+                return
+            }
             else props[key] = value;
         });
 
@@ -54,21 +60,23 @@ export class Block {
     }
     
     init() {
-        console.log(`INIT[${this.id}]`);
+        console.log(`INIT[${this.id}]:`, this._meta);
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
 
     _render() {
-        Object.entries(this.children).forEach(([key, child]) => {
-            this.props[key] = `<div data-id="${child.id}"></div>`
+        const stubs = {};
+        Object.entries(this.children).forEach(([key, child]) => {            
+            stubs[key] = `<div data-id="${child.id}"></div>`
         })
         
-        const elementString = Handlebars.compile(this.render().trim())(this.props);
+        const elementString = Handlebars.compile(this.render().trim())({ ...this.props, ...stubs});
         
         const tempElement = document.createElement('div');
         tempElement.insertAdjacentHTML('afterbegin', elementString.trim());
 
         const resultElement = tempElement.firstElementChild;
+        resultElement.setAttribute('data-id', this.id);
 
         Object.values(this.children).forEach((child) => {
             const stub = resultElement.querySelector(`[data-id="${child.id}"]`);
@@ -76,9 +84,8 @@ export class Block {
         })
 
         if (this._element) this._element.replaceWith(resultElement);
-        else this._element = resultElement;
-
-        // this._element.setAttribute('data-id', this.id);
+        this._element = resultElement;
+        
         this._attachEvents();
         console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, { ...this._meta, elem: this._element })
     }
@@ -98,8 +105,10 @@ export class Block {
     }
     
     _componentDidUpdate(oldProps, newProps) {
+        console.log(`_CDU[${this._element?.nodeName + '::' + this.id}]::${this.count}`, { ...this._meta, elem: this._element })
         const response = this.componentDidUpdate(oldProps, newProps);
         if (response) {
+            this._detachEvents();
             this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
             return true;
         }
@@ -119,13 +128,13 @@ export class Block {
         }
 
         /** Попытка сравнивать пропсы не удалась */
-        // const expectedProps = { ...this.props, ...nextProps };
-        // const isEqual = deepEqual(this.props, expectedProps)
-        // console.log(`set::equality:`, { curr: this.props, expc: expectedProps })
-        // if (isEqual) {
-        //     console.warn(`Properties arent changed.`);
-        //     return;
-        // }
+        const expectedProps = { ...this.props, ...nextProps };
+        const isEqual = deepEqual(this.props, expectedProps)
+        console.log(`set::equality:`, { curr: this.props, expc: expectedProps })
+        if (isEqual) {
+            console.warn(`Properties arent changed.`);
+            return;
+        }
 
         for (const [key, value] of Object.entries(nextProps)) {
             console.log(`set[${key}]:${this.props[key]} > ${value}`)
@@ -196,5 +205,9 @@ export class Block {
     
     hide() {
         this.getContent().style.display = "none";
+    }
+
+    getPropsChildren() {
+        return Object.entries(this.children).reduce((acc, [key, child]) => ({ ...acc, [key]: child.props }), {})
     }
 }
