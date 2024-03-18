@@ -1,5 +1,7 @@
-function password (string) {
-    if (!string) return
+const requiredStatus = { hasError: true, textError: 'This field is required.' };
+
+function password ({ string, isRequred = false }) {
+    if (!string && isRequred) return requiredStatus;
 
     const MIN_LENGTH = 8;
 
@@ -42,8 +44,8 @@ function password (string) {
 }
 
 const username = login;
-function login (string) {
-    if (!string) return
+function login ({ string, isRequred = false }) {
+    if (!string && isRequred) return requiredStatus;
     
     const MIN_LENGTH = 3;
 
