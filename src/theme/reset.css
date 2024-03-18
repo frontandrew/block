@@ -3,16 +3,13 @@ body, h1, h2, h3, h4, h5, h6, ul, li, input, button, span, p {
   padding: 0;
 }
 
+button,
 input {
   border: none;
   background: none;
 }
 
+button:focus-visible,
 input:focus-visible {
   outline: none;
-}
-
-button {
-  background: none;
-  border: none;
 }
