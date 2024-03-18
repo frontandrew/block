@@ -14,7 +14,7 @@ export class Field extends Block {
                 this._setValue(event)
                 return event;
             },
-            onFocusout: (event) => {
+            onChange: (event) => {
                 this.validate()
                 return event;
             },
@@ -41,8 +41,12 @@ export class Field extends Block {
             isRequred: this.props.required,
         });
         this.setProps({ ...validationState, value: this._value });
-        // return validationState.hasError;
-    } 
+    }
+
+    reset() {
+        this.setProps({ value: '', hasError: false, touched: false })
+        this._value = this.props.value
+    }
 
     render() {
         return template

@@ -87,7 +87,7 @@ export class Block {
         this._element = resultElement;
         
         this._attachEvents();
-        console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, this)
+        // console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, this)
     }
     
     render() {}
@@ -105,7 +105,7 @@ export class Block {
     }
     
     _componentDidUpdate(oldProps, newProps) {
-        console.log(`_CDU[${this._element?.nodeName + '::' + this.id}]::${this.count}`, { ...this._meta, elem: this._element })
+        // console.log(`_CDU[${this._element?.nodeName + '::' + this.id}]::${this.count}`, { ...this._meta, elem: this._element })
         const response = this.componentDidUpdate(oldProps, newProps);
         if (response) {
             this._detachEvents();
@@ -157,7 +157,8 @@ export class Block {
         const proxyProps = new Proxy(props, {
             get(target, prop) {
               if (prop.indexOf('_') === 0) {
-                throw Error('Нет прав');
+                console.warn(`Cant get this property: ${prop}`);
+                return;
               }
               
               const value = target[prop];
@@ -166,7 +167,8 @@ export class Block {
             
             set(target, prop, value) {
               if (prop.indexOf('_') === 0) {
-                throw Error('Нет прав');
+                console.warn(`Cant set this property: ${prop}`);
+                return;
               }
 
             //   console.log(`SET:[${this.id}]`, { target, prop })
@@ -176,7 +178,7 @@ export class Block {
             },
             
             deleteProperty() {
-                throw Error('Propertys delete is not allowed.');
+                console.warn(`Propertys delete is not allowed.`);
             }
         });
 

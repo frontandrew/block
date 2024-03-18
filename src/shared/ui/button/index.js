@@ -17,11 +17,15 @@ export class Button extends Block {
         });
     }
 
-    render() {
-        return template
-    }
-
     setDisabled(state) {
         this.setProps({ disabled: state })
+    }
+
+    reset() {
+        this.setProps({ disabled: false })
+    }
+
+    render() {
+        return template
     }
 }
