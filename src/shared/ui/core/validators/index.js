@@ -1,4 +1,6 @@
 function password (string) {
+    if (!string) return
+
     const MIN_LENGTH = 8;
 
     let message = '';
@@ -35,12 +37,14 @@ function password (string) {
     
     if (message.trim().endsWith(',')) message = message.slice(0, -1).concat('.');
     
-    console.warn({ atLeastCheckResult, message, status, })
+    // console.warn({ atLeastCheckResult, message, status, })
     return { hasError: status, textError: status ? message : '' }
 }
 
 const username = login;
 function login (string) {
+    if (!string) return
+    
     const MIN_LENGTH = 3;
 
     let message = '';

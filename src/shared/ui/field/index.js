@@ -11,7 +11,12 @@ export class Field extends Block {
     constructor(props = {}) {
         super({
             onChange: (event) => this._setValue(event),
+            onFocusout: () => this.validate(),
             validator: validators[props.name],
+            touched: false,
+            hasError: false,
+            textError: null,
+            textHelp: null,
             ...props,
         });
     }
@@ -22,13 +27,15 @@ export class Field extends Block {
         })
     }
 
-    toggleError(error) {
-        this.setProps(error)
+    setState(state) {
+        this.setProps(state)
     }
 
     validate() {
+        // console.warn(this)
         const validationState = this.props.validator(this.props.value);
-        this.toggleError(validationState);
+        this.setState(validationState);
+        return validationState.hasError;
     }
 
     render() {

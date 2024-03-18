@@ -87,7 +87,7 @@ export class Block {
         this._element = resultElement;
         
         this._attachEvents();
-        console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, { ...this._meta, elem: this._element })
+        console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, this)
     }
     
     render() {}
@@ -132,7 +132,7 @@ export class Block {
         const isEqual = deepEqual(this.props, expectedProps)
         // console.log(`set::equality:`, { curr: this.props, expc: expectedProps })
         if (isEqual) {
-            console.warn(`Properties arent changed.`);
+            console.warn(`Properties arent changed.`, { curr: this.props, next: expectedProps });
             return;
         }
 

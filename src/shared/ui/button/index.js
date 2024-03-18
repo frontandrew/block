@@ -15,7 +15,7 @@ export class Button extends Block {
         return template
     }
 
-    toggleDisable(state) {
+    setDisabled(state) {
         this.setProps({ disabled: state })
     }
 }

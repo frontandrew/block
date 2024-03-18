@@ -17,30 +17,39 @@ const authForm = class AuthForm extends Form {
             onSubmit: (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                this.someFn()
-                this.processEvent(e)
-                return e
+                this.processEvents(e)
+                return e;
             },
             onChange: (e) => {
-                this.processEvent(e)
+                this.processEvents(e)
+                return e;
             },
             onReset: (e) => {
-                this.processEvent(e)
+                this.processEvents(e)
             },
+
+            touched: false,
+            hasError: false,
         })
 
         this._count = 0;
     }
 
-    processEvent(event) {
+    processEvents(event) {
         console.log('FORM EVENT', event)
         const { type, target } = event;
         if (type === 'change') {
-            this.children[target.name].validate()
+            // this.injectMethods()
         }
 
         if (type === 'submit') {
-
+            const formErrorState = Object.values(this.children)
+                .reduce((acc, child) => {
+                    if ('validate' in child) return [...acc, child.validate()]
+                    return acc;
+                }, [])
+                .some(Boolean)
+                this.setSubmitState(formErrorState)
         }
         
         if (type === 'reset') {
@@ -48,11 +57,20 @@ const authForm = class AuthForm extends Form {
         }
     }
 
-    someFn() {
-        this.children.submit.setProps({
-            label: `Submitted: ${++this._count}`
-        })
-    }
+    setSubmitState(state) {
+        this.children['submit'].setDisabled(state);
+    }    
+
+    // getErrorState() {
+    //     const state = {}
+    //     Object.entries(this.children).forEach(([key, value]) => {
+    //         if ('getState' in value) {
+    //             state[key] = value.getState().hasError
+    //         }
+    //     })
+    //     console.warn('FORM INPUTS STATE:', state)
+    //     return state;
+    // }
 
     render() {
         return(
@@ -82,12 +100,13 @@ const layout = class Layout extends BaseLayout {
                     name: 'password',
                     type: 'password',
                     label: 'Password',
+                    value: 'gd',
                 },
                 login: {                    
                     name: 'login',
                     type: 'text', 
                     label: 'Login',
-                    value: 'VALERA',
+                    value: 'ра',
                 },
                 submit: {
                     label: 'Submit',
