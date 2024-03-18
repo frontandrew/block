@@ -15,7 +15,7 @@ export class Field extends Block {
                 return event;
             },
             onFocusout: (event) => {
-                this.validate(event)
+                this.validate()
                 return event;
             },
             validator: validators[props.name],
@@ -23,6 +23,8 @@ export class Field extends Block {
             hasError: false,
             textError: null,
             textHelp: null,
+            required: false,
+
             ...props,
         });
 
@@ -34,9 +36,12 @@ export class Field extends Block {
     }
 
     validate() {
-        const validationState = this.props.validator(this._value);
+        const validationState = this.props.validator({
+            string: this._value,
+            isRequred: this.props.required,
+        });
         this.setProps({ ...validationState, value: this._value });
-        return validationState.hasError;
+        // return validationState.hasError;
     } 
 
     render() {
