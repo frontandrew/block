@@ -10,8 +10,14 @@ Handlebars.registerPartial('Field', template)
 export class Field extends Block {
     constructor(props = {}) {
         super({
-            onChange: (event) => this._setValue(event),
-            onFocusout: () => this.validate(),
+            onInput: (event) => {
+                this._setValue(event)
+                return event;
+            },
+            onFocusout: (event) => {
+                this.validate(event)
+                return event;
+            },
             validator: validators[props.name],
             touched: false,
             hasError: false,
@@ -19,24 +25,19 @@ export class Field extends Block {
             textHelp: null,
             ...props,
         });
+
+        this._value = this.props.value
     }
     
-    _setValue(event) {
-        this.setProps({
-            value: event.target.value
-        })
-    }
-
-    setState(state) {
-        this.setProps(state)
+    _setValue({ target }) {
+        this._value = target.value
     }
 
     validate() {
-        // console.warn(this)
-        const validationState = this.props.validator(this.props.value);
-        this.setState(validationState);
+        const validationState = this.props.validator(this._value);
+        this.setProps({ ...validationState, value: this._value });
         return validationState.hasError;
-    }
+    } 
 
     render() {
         return template
