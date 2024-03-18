@@ -60,7 +60,7 @@ export class Block {
     }
     
     init() {
-        // console.log(`INIT[${this.id}]:`, this._meta);
+        this.instance = this.__proto__.constructor.name;
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
 
