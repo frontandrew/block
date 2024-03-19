@@ -1,0 +1,15 @@
+.form-auth {
+    display: flex;
+    flex-direction: column;
+    
+    height: 460px;
+    width: 340px;
+
+    padding: 3.1em 1.9em 1.9em;    
+}
+
+.form-auth .form-auth__title {
+    padding-bottom: 1.5em;
+    text-align: center;
+    font-size: 1.25em;
+}

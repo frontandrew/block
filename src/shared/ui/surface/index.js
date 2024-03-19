@@ -4,9 +4,9 @@ import template from './template.hbs?raw';
 import './style.css'
 
 import Handlebars from 'handlebars';
-Handlebars.registerPartial('BaseLayout', template)
+Handlebars.registerPartial('Surface', template)
 
-export class BaseLayout extends Block {
+export class Surface extends Block {
 
     render() {
         return template

@@ -9,7 +9,7 @@ body {
     z-index: var(--z-index-content);
 }
 
-#app {
+.app {
     min-width: 100%;
     height: 100%;
 }

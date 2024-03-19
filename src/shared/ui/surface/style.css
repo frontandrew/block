@@ -1,0 +1,5 @@
+.surface {
+    background-color: var(--background-color-default);
+    border-radius: var(--surface-border);
+    box-shadow: var(--surface-shadow);
+}
