@@ -65,12 +65,29 @@ export class Block {
     }
 
     _render() {
-        const stubs = {};
-        Object.entries(this.children).forEach(([key, child]) => {            
-            stubs[key] = `<div data-id="${child.id}"></div>`
+        const element = this.createDOMElement()
+
+        Object.values(this.children).forEach((child) => {
+            const stub = element.querySelector(`[data-id="${child.id}"]`);
+            stub?.replaceWith(child.getContent());
         })
+
+        if (this._element) this._element.replaceWith(element);
+        this._element = element;
         
-        const elementString = Handlebars.compile(this.render().trim())({ ...this.props, ...stubs});
+        this._attachEvents();
+        console.log(`RNDR[${this.instance + ':' + this.id}]::${++this.count}`, this)
+    }
+    
+    render() {}
+
+    createDOMElement() {
+        const stubs = Object.entries(this.children).reduce((acc, [key, child]) => ({
+            ...acc,
+            [key]: `<div data-id="${child.id}"></div>`,
+        }), {});
+
+        const elementString = Handlebars.compile(this.render().trim())({ ...this.props, ...stubs });
         
         const tempElement = document.createElement('div');
         tempElement.insertAdjacentHTML('afterbegin', elementString.trim());
@@ -78,19 +95,8 @@ export class Block {
         const resultElement = tempElement.firstElementChild;
         resultElement.setAttribute('data-id', this.id);
 
-        Object.values(this.children).forEach((child) => {
-            const stub = resultElement.querySelector(`[data-id="${child.id}"]`);
-            stub?.replaceWith(child.getContent());
-        })
-
-        if (this._element) this._element.replaceWith(resultElement);
-        this._element = resultElement;
-        
-        this._attachEvents();
-        // console.log(`RNDR[${this._element?.nodeName + '::' + this.id}]::${++this.count}`, this)
+        return resultElement;
     }
-    
-    render() {}
     
     _componentDidMount() {
         this.componentDidMount();
@@ -127,7 +133,10 @@ export class Block {
             return;
         }
 
-        /** Попытка сравнивать пропсы не удалась */
+        /**
+         *  TODO: попытка сравнивать пропсы, чтоб принять решение, ножно ли их обновлять.
+         *  Иногда кажется, что работает не корректно, нужно 
+         */
         const expectedProps = { ...this.props, ...nextProps };
         const isEqual = deepEqual(this.props, expectedProps)
         // console.log(`set::equality:`, { curr: this.props, expc: expectedProps })
@@ -136,10 +145,10 @@ export class Block {
             return;
         }
 
-        for (const [key, value] of Object.entries(nextProps)) {
+        Object.entries(nextProps).forEach(([key, value]) => {
             // console.log(`set[${key}]:${this.props[key]} > ${value}`)
             this.props[key] = value
-        }
+        })
 
         this.eventBus().emit(Block.EVENTS.FLOW_CDU, nextProps, this.props);
     };
