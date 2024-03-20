@@ -1,0 +1,18 @@
+<li class="item-chat-container"{{#if id}} key={{id}}{{/if}}>
+    <div class="item-chat">
+            {{!-- {{>Avatar}} --}}
+            <div class="item-chat-info">
+                    <div class="item-chat-info-title">
+                            <p class="item-chat-name text text_title">{{name}}</p>
+                            <date class="item-chat-date text text_label text_light-color">{{date}}</date>
+                    </div>
+                    <div class="item-chat-info-subtitle">
+                            <span class="item-chat-message text text_light-color">{{message}}</span>
+                            <div class="item-chat-count">
+                                    <span class="text text text_contrast-color">{{count}}</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+    {{>Divider}}
+</li>

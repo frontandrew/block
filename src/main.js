@@ -1,4 +1,4 @@
-import { PageLogin } from './pages';
+import { PageLogin, PageChats } from './pages';
 
 function render(query, block) {
     const root = document.querySelector(query);
@@ -6,4 +6,4 @@ function render(query, block) {
     return root;
 }
 
-render(".app", new PageLogin());
+render(".app", new PageChats());

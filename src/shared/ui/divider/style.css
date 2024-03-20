@@ -1,0 +1,6 @@
+.divider {
+    height: 1px;
+    max-width: 100%;
+
+    background-color: var(--background-color-contrast);
+}

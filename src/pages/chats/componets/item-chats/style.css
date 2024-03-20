@@ -1,0 +1,83 @@
+.item-chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.item-chat-container:last-child > .divider {
+    display: none;
+}
+
+.item-chat {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    
+    padding: 10px;
+}
+
+.item-chat:hover {
+    background-color: var(--item-hover-color);
+}
+
+.item-chat-info {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    gap: 4px;
+    
+    width: 233px;
+}
+
+.item-chat-info-title {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.item-chat-info-subtitle {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    gap: 20px;
+}
+
+.item-chat-name {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.item-chat-date {
+    text-wrap: nowrap;
+}
+
+.item-chat-message {
+    max-height: 30px;
+    max-width: 190px;
+
+    align-self: flex-start;
+
+    /** durty hack https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.item-chat-count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    height: 20px;
+    width: 20px;
+    align-self: flex-end;
+
+    border-radius: 50%;
+    background-color: var(--main-color);
+}
