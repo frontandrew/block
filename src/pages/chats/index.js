@@ -1,5 +1,4 @@
-import { ListChats } from "./componets";
-import { Layout } from "./layout";
+import { ListChats, Layout } from "./components";
 
 const data = [
     {

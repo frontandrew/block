@@ -1,8 +1,7 @@
-import { FormAuth } from "./componets";
-import { Layout } from "./layout";
+import { FormAuth, Layout } from "./components";
 
 export class PageLogin extends Layout {
-    constructor(props) {
+    constructor() {
         super({
             form: new FormAuth({
                 title: {
