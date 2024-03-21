@@ -17,11 +17,11 @@
 }
 
 .field__input {
-    padding: 0.4em 0;
+    padding: .4615385em 0;
 
     border-bottom: none;
     border-color: var(--main-color);
-    margin-top: 0.8em;
+    margin-top: .69231em;
 }
 
 .field__input::placeholder {
@@ -37,20 +37,21 @@
 }
 
 .field__label:has(+ .field__input:not(:focus):placeholder-shown) {
-    transform: translateY(1.2em);
+    transform: translateY(1.3em);
+    font-size: .8125em;
     transition:
-      font-size 0.2s,
-      transform 0.2s;
+      font-size .2s,
+      transform .2s;
 }
 
 .field__label:has(+ .field__input:focus) {
     transform: translateY(0px);
     transition:
-      font-size 0.2s,
-      transform 0.2s;
+      font-size .2s,
+      transform .2s;
 }
 
 .field__text {
-    padding: 1em 0 0;
+    padding: .875em 0 0;
     height: 1em;
 }

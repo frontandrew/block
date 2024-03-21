@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: column;
     
-    height: 460px;
-    width: 340px;
+    height: 28.75em;
+    width: 21.25em;
 
     padding: 3.125em 1.875em 1.875em;
 }

@@ -1,5 +1,7 @@
 .button {
     cursor: pointer;
+    font-size: .8125em;
+    line-height: 1em;
 }
 
 .button:focus,
@@ -19,8 +21,8 @@
 .button__filled {
     background: var(--main-color);
     border: none;
-    padding: 1em 1.6em;
-    border-radius: 0.67em;
+    padding: .92308em;
+    border-radius: .615385em;
 
     color: var(--text-color-contrast);
 
@@ -39,7 +41,7 @@
 .button__link {
     background: none;
     border: none;
-    color: var(--main-color)
+    color: var(--main-color);
 }
 
 .button__link:disabled {

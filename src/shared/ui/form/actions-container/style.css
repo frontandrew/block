@@ -1,5 +1,5 @@
 .form__actions-container {
     display: flex;
     flex-direction: column;
-    gap: 0.4em;
+    gap: 0.875em;
 }
