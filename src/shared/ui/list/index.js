@@ -34,4 +34,8 @@ export class List extends Block {
 
         console.log(`RNDR[${this.instance + ':' + this.id}]::${++this.count}`, this)
     }
+
+    render() {
+        return template;
+    }
 }

@@ -1,4 +1,4 @@
-import { ListChats, Layout } from "./components";
+import { Layout } from "./components";
 
 const data = [
     {
@@ -20,11 +20,7 @@ const data = [
 ]
 
 export class PageChats extends Layout {
-    constructor() {
-        super({
-            listChats: new ListChats({
-                items: data,
-            }),
-        })
+    constructor(props) {
+        super({ data, ...props })
     }
 };
