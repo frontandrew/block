@@ -1,18 +1,18 @@
-import { FormAuth, Layout } from "./components";
+import { Layout } from "./components";
 
 export class PageLogin extends Layout {
     constructor() {
         super({
-            form: new FormAuth({
-                title: {
-                    tag: 'h1',
-                    text: 'Authorization',
-                    /**
-                     * Пришлось передать специальные стили через
-                     * конструктор блока, нужно придумать что то...
-                     */
-                    class: 'form-auth__title',
-                },
+            title: {
+                tag: 'h1',
+                text: 'Authorization',
+                /**
+                 * TODO: Пришлось передать специальные стили через
+                 * конструктор блока, нужно придумать что то...
+                 */
+                class: 'layout-content__title',
+            },
+            form: {                
                 password: {
                     name: 'password',
                     type: 'password',
@@ -40,7 +40,7 @@ export class PageLogin extends Layout {
                     type: 'reset',
                     variant: 'link',
                 },
-            }),
+            },
         })
     }
 };
