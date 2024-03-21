@@ -29,7 +29,7 @@ export class PageLogin extends Layout {
                     required: true,
                     value: 'And',
 
-                    // inline: true,
+                    inline: true,
                 },
                 submit: {
                     label: 'Sign in',

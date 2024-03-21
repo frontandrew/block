@@ -2,10 +2,10 @@
     display: flex;
     flex-direction: column;
     border: none;
+}
 
-    .divider {
-        background-color: var(--main-color);
-    }
+.field .divider {
+    background-color: var(--main-color);
 }
 
 .field_error .divider {
@@ -16,11 +16,13 @@
     background-color: var(--disabled-color);
 }
 
+.field-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .field__input {
     padding: .4615385em 0;
-
-    border-bottom: none;
-    border-color: var(--main-color);
     margin-top: .69231em;
 }
 
@@ -32,13 +34,18 @@
     color: var(--disabled-color);
 }
 
-.field__label {
+.field .field__label {
     height: 0px;
+
+    /* font-size: .8125em; */
+    font-size: .5625em;
+    color: var(--text-color-light);
 }
 
 .field__label:has(+ .field__input:not(:focus):placeholder-shown) {
     transform: translateY(1.3em);
     font-size: .8125em;
+    /* font-size: .5625em; */
     transition:
       font-size .2s,
       transform .2s;
@@ -46,6 +53,8 @@
 
 .field__label:has(+ .field__input:focus) {
     transform: translateY(0px);
+    /* font-size: .8125em; */
+    /* font-size: .5625em; */
     transition:
       font-size .2s,
       transform .2s;
@@ -58,35 +67,34 @@
 
 /* INLINE RULES */
 
-.field__input-inline {
-    padding: .4615385em 0;
+.field-container_inline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-    border-bottom: none;
-    border-color: var(--main-color);
-    /* margin-top: .69231em; */
-
-    order: 0;
+    gap: .5em;
 }
 
-.field__input-inline::placeholder {
+.field .field__input_inline {
+    width: 100%;
+    padding: .4615385em 0;
+
+    color: var(--text-color-light);
+}
+
+.field__input_inline::placeholder {
     color: var(--text-hided-color);
 }
 
-.field__input-inline:disabled {
+.field__input_inline:disabled {
     color: var(--disabled-color);
 }
 
-.field .field__label-inline {
-    height: 0px;
-    font-size: 0.75em;
-    translate: 0 -1.62em;
-    
-    order: 1;
+.field .field__label_inline {
+    /* font-size: 0.75em; */
 }
 
-.field__text-inline {
+.field__text_inline {
     padding: 0.75em 0 0;
     min-height: 0.8em;
-
-    order: 2;
 }
