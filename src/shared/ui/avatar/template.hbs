@@ -1,0 +1,7 @@
+<div class="{{#if class}}{{class}} {{/if}} avatar avatar_{{size}}">
+    {{#if source}}
+        <img class="avatar__image" src="{{source}}" alt="user avatar">
+    {{else}}
+        <img class="avatar__image-default avatar__image-default_{{size}}" src="{{defaultImage}}" alt="empty user avatar">
+    {{/if}}
+</div>

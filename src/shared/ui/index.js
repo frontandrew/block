@@ -1,4 +1,5 @@
 export { ActionsContainer } from './form/actions-container'
+export { Avatar } from './avatar'
 export { BaseLayout } from './base-layout'
 export { Button } from './button'
 export { Divider } from './divider'
