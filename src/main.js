@@ -6,4 +6,4 @@ function render(query, block) {
     return root;
 }
 
-render(".app", new PageChats());
+render(".app", new PageLogin());

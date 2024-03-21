@@ -24,11 +24,12 @@ export class Field extends Block {
             textError: null,
             textHelp: null,
             required: false,
+            disabled: false,
 
             ...props,
         });
 
-        this._value = this.props.value
+        this._value = this.props.value;
     }
     
     _setValue({ target }) {

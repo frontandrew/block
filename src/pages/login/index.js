@@ -6,7 +6,7 @@ export class PageLogin extends Layout {
             form: new FormAuth({
                 title: {
                     tag: 'h1',
-                    text: 'Authtorisation',
+                    text: 'Authorization',
                     /**
                      * Пришлось передать специальные стили через
                      * конструктор блока, нужно придумать что то...
