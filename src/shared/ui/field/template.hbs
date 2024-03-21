@@ -1,7 +1,7 @@
 <div class="field{{#if hasError}} field_error{{/if}}{{#if disabled}} field_disabled{{/if}}">
-  <label for="{{name}}" class="field__label text text_light-color text_label">{{label}}</label>
+  <label for="{{name}}" class="field__label{{#if inline}}-inline{{/if}} text text_light-color text_label">{{label}}</label>
   <input
-    class="field__input text{{#if hasError}} text_error-color{{/if}}"
+    class="field__input{{#if inline}}-inline text_rigth{{/if}} text{{#if hasError}} text_error-color{{/if}}"
     type="{{type}}"
     name="{{name}}"
     id="{{name}}"
@@ -11,8 +11,8 @@
   />
   {{>Divider}}
   {{#if hasError}}
-    <span class="field__text text text_error-color text_info">{{textError}}</span>
+    <span class="field__text{{#if inline}}-inline{{/if}} text text_error-color text_info">{{textError}}</span>
   {{else}}
-    <span class="field__text text text_light-color text_info">{{textHelp}}</span>
+    <span class="field__text{{#if inline}}-inline{{/if}} text text_light-color text_info">{{textHelp}}</span>
   {{/if}}  
 </div>

@@ -55,3 +55,38 @@
     padding: .875em 0 0;
     height: 1em;
 }
+
+/* INLINE RULES */
+
+.field__input-inline {
+    padding: .4615385em 0;
+
+    border-bottom: none;
+    border-color: var(--main-color);
+    /* margin-top: .69231em; */
+
+    order: 0;
+}
+
+.field__input-inline::placeholder {
+    color: var(--text-hided-color);
+}
+
+.field__input-inline:disabled {
+    color: var(--disabled-color);
+}
+
+.field .field__label-inline {
+    height: 0px;
+    font-size: 0.75em;
+    translate: 0 -1.62em;
+    
+    order: 1;
+}
+
+.field__text-inline {
+    padding: 0.75em 0 0;
+    min-height: 0.8em;
+
+    order: 2;
+}

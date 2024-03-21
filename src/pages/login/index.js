@@ -19,6 +19,8 @@ export class PageLogin extends Layout {
                     label: 'Password',
                     required: true,
                     value: '!Q1qwert',
+
+                    // inline: true,
                 },
                 login: {                    
                     name: 'login',
@@ -26,6 +28,8 @@ export class PageLogin extends Layout {
                     label: 'Login',
                     required: true,
                     value: 'And',
+
+                    // inline: true,
                 },
                 submit: {
                     label: 'Sign in',
