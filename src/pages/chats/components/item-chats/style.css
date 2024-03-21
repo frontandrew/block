@@ -1,14 +1,30 @@
-.item-chat-container {
+.item-chat {
+    position: relative;
+
     display: flex;
     flex-direction: column;
-    gap: 2px;
 }
 
-.item-chat-container:last-child > .divider {
+.item-chat .divider {
+    margin: 2px 10px;
+}
+
+.item-chat:last-child .divider {
     display: none;
 }
 
-.item-chat {
+.item-chat__touch-layer {
+    position: absolute;
+    
+    height: 100%;
+    width: 100%;
+}
+
+.item-chat__touch-layer:hover {
+    cursor: pointer;
+}
+
+.item-chat__container {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -16,11 +32,15 @@
     padding: 10px;
 }
 
-.item-chat:hover {
+.item-chat__container:has(~ .item-chat__touch-layer:hover) {
     background-color: var(--item-hover-color);
 }
 
-.item-chat-info {
+.item-chat__container:active {
+    background-color: var(--item-hover-color);
+}
+
+.item-chat__info {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -29,7 +49,7 @@
     width: 233px;
 }
 
-.item-chat-info-title {
+.item-chat__info-title {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
@@ -37,7 +57,7 @@
     gap: 20px;
 }
 
-.item-chat-info-subtitle {
+.item-chat__info-subtitle {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
@@ -46,30 +66,30 @@
     gap: 20px;
 }
 
-.item-chat-name {
+.item-chat__name {
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
-.item-chat-date {
+.item-chat__date {
     text-wrap: nowrap;
 }
 
-.item-chat-message {
+.item-chat__message {
     max-height: 30px;
     max-width: 190px;
 
     align-self: flex-start;
-
-    /** durty hack https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp */
     overflow: hidden;
+
+    /* durty hack: https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp */
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
 }
 
-.item-chat-count {
+.item-chat__count {
     display: flex;
     justify-content: center;
     align-items: center;

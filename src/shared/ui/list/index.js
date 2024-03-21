@@ -11,6 +11,12 @@ export class List extends Block {
         super({
             items: [],
             // itemClass: Block, // похоже нужно создать класс по умолчаниюю
+
+            onClick: (event) => {
+                console.log('ITEM CLICK:', event)
+                return event;
+            },
+
             ...props,
         });
     }
@@ -33,6 +39,10 @@ export class List extends Block {
         });
 
         console.log(`RNDR[${this.instance + ':' + this.id}]::${++this.count}`, this)
+    }
+
+    _selectItem() {
+        Object.values()
     }
 
     render() {
