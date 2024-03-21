@@ -4,14 +4,20 @@
             <div class="item-chat__info">
                     <div class="item-chat__info-title">
                             <p class="item-chat__name text text_title">{{name}}</p>
-                            <date class="item-chat__date text text_label text_light-color">{{date}}</date>
+                            {{#if date}}
+                                <date class="item-chat__date text text_label text_light-color">{{date}}</date>
+                            {{/if}}
                     </div>
-                    <div class="item-chat__info-subtitle">
-                            <span class="item-chat__message text text_light-color">{{message}}</span>
-                            <div class="item-chat__count">
-                                    <span class="text text text_contrast-color">{{count}}</span>
-                            </div>
-                    </div>
+                    {{#if message}}
+                        <div class="item-chat__info-subtitle">
+                                <span class="item-chat__message text text_light-color">{{message}}</span>
+                                {{#if count}}
+                                        <div class="item-chat__count">
+                                                <span class="text text text_contrast-color">{{count}}</span>
+                                        </div>
+                                {{/if}}
+                        </div>
+                    {{/if}}
             </div>
     </div>
     {{>Divider}}
