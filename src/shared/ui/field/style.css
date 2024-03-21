@@ -38,7 +38,6 @@
 
 .field__label:has(+ .field__input:not(:focus):placeholder-shown) {
     transform: translateY(1.2em);
-    font-size: 0.75em;
     transition:
       font-size 0.2s,
       transform 0.2s;
@@ -52,6 +51,6 @@
 }
 
 .field__text {
-    padding: 0.75em 0 0;
-    min-height: 0.8em;
+    padding: 1em 0 0;
+    height: 1em;
 }

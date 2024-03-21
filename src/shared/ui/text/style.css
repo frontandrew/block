@@ -2,7 +2,8 @@
     color: var(--text-color-main);
     font-family: var(--font-family-base);
     font-weight: 500;
-    font-size: 0.75rem;
+    font-size: 0.75em;
+    line-height: 1em;
 }
 
 .text_title {
@@ -14,12 +15,12 @@
 }
 
 .text_label {
-    font-size: 0.54rem;
+    font-size: 0.5625em;
     font-weight: 500;
 }
 
 .text_info {
-    font-size: 0.5rem;
+    font-size: 0.5em;
     font-weight: 400;
 }
 

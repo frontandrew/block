@@ -5,11 +5,11 @@
     height: 460px;
     width: 340px;
 
-    padding: 3.1em 1.9em 1.9em;    
+    padding: 3.125em 1.875em 1.875em;
 }
 
 .form-auth .form-auth__title {
-    padding-bottom: 1.5em;
+    padding-bottom: 2em;
     text-align: center;
     font-size: 1.25em;
 }
