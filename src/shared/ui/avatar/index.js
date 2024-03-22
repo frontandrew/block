@@ -1,6 +1,6 @@
 import { Block } from '../core';
 
-import { Default } from '../../../assets/images'
+import { DefaultPic } from '../../../assets/images'
 import template from './template.hbs?raw';
 import './style.css'
 
@@ -10,7 +10,7 @@ Handlebars.registerPartial('Avatar', template)
 export class Avatar extends Block {
     constructor(props = {}) {
         super({
-            source: Default,
+            defaultPic: DefaultPic,
             size: 'medium',
             ...props
         });

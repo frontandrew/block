@@ -1,9 +1,9 @@
 import { Layout } from "./components";
 
+import { Avatar } from "../../assets/images";
 const data = [
     {
         id: 5,
-        avatar: { size: 'medium', image: '' },
         name: 'John Doe',
         date: 'Su',
         message: 'Чекаво? Вася!',
@@ -11,7 +11,6 @@ const data = [
     },
     {
         id: 7,
-        avatar: { size: 'medium', image: '' },
         name: 'Samanta Smith',
         date: '10:59',
         message: 'Алло, на!',
@@ -19,7 +18,7 @@ const data = [
     },
     {
         id: 150,
-        avatar: { size: 'medium', image: '' },
+        avatar: { pic: Avatar },
         name: 'Zombak',
         date: 'Tu',
         message: 'Ha-Ha-ha!!',
@@ -27,7 +26,6 @@ const data = [
     },
     {
         id: 256,
-        avatar: { size: 'medium', image: '' },
         name: 'Imperor',
         date: '21:03',
         message: 'Алло, на!',
@@ -35,16 +33,16 @@ const data = [
     },
     {
         id: 150,
-        avatar: { size: 'medium', image: '' },
+        avatar: { pic: Avatar },
     },
     {
         id: 255,
-        avatar: { size: 'medium', image: '' },
+        avatar: { pic: Avatar },
         name: 'Kornelius Vander Disappointovichev',
     },
     {
         id: 256,
-        avatar: { size: 'medium', image: '' },
+        avatar: { pic: Avatar },
         name: 'Kornelius Vander Disappointovichev',
         date: '22 Feb 2022',
         message: 'Lorem, quas ab similique quia pere culpa kufnsk su veniam accusantium.',
@@ -52,18 +50,17 @@ const data = [
     },
     {
         id: 257,
-        avatar: { size: 'medium', image: '' },
+        avatar: { pic: Avatar },
         name: 'Kornelius Vander Disappointovichev',
         message: 'Lorem, quas ab similique quia pere culpa kufnsk su veniam accusantium.',
     },
     {
         id: 14313,
-        avatar: { size: 'medium', image: '' },
+        avatar: { pic: Avatar },
         name: 'Тимур',
     },
     {
         id: 13,
-        avatar: { size: 'medium', image: '' },
         name: 'Imperor',
         date: '8 March',
         message: 'Алло, на!',
