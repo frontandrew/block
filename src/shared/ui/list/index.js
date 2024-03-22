@@ -12,13 +12,36 @@ export class List extends Block {
             items: [],
             // itemClass: Block, // похоже нужно создать класс по умолчаниюю
 
-            onClick: (event) => {
-                console.log('ITEM CLICK:', event)
+            onClick: (event) => {                
+                this.processSelectEvent(event)
                 return event;
             },
 
             ...props,
         });
+
+        this.active = null;
+    }
+
+    processSelectEvent(event) {
+        const id = this._getClickedChildId(event);
+
+        if(id === this.active) return;
+        if(this.active) {
+            this.children[this.active].toggleActive();
+        }
+
+        this.active = id;        
+        this.children[this.active].toggleActive();
+
+        const { instance, _meta } = this.children[this.active];
+        console.warn(`SELECTED[${instance}:${this.active}]::`, _meta.props)
+    }
+
+    _getClickedChildId(event) {
+        console.log('@ITEM CLICK:', event)
+        const id = event.target.parentElement.attributes.key.value;
+        return id;
     }
 
     _render() {        
@@ -31,7 +54,7 @@ export class List extends Block {
 
         this.children = this.props.items.reduce((acc, item) => {
             const child = new this.props.itemClass(item)
-            return { ...acc, [`${child.id}`]: child }
+            return { ...acc, [`${child.props.id}`]: child }
         }, {});
 
         Object.values(this.children).forEach((child) => {
@@ -39,10 +62,6 @@ export class List extends Block {
         });
 
         console.log(`RNDR[${this.instance + ':' + this.id}]::${++this.count}`, this)
-    }
-
-    _selectItem() {
-        Object.values()
     }
 
     render() {

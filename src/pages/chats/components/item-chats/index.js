@@ -10,8 +10,13 @@ export class ItemChats extends Block {
             avatar: new Avatar(avatar),
             
             name: 'Undefined',
+            active: false,
             ...props,
         })
+    }
+
+    toggleActive() {
+        this.setProps({ active: !this.props.active })
     }
 
     render() {
