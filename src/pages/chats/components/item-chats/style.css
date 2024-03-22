@@ -40,7 +40,7 @@
     background-color: var(--item-hover-color);
 }
 
-.item-chat__container:active {
+.item-chat__container_active {
     background-color: var(--item-hover-color);
 }
 

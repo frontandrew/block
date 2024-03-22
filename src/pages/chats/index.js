@@ -23,6 +23,7 @@ const data = [
         date: 'Tu',
         message: 'Ha-Ha-ha!!',
         count: '1',
+        active: true,
     },
     {
         id: 256,
