@@ -26,7 +26,7 @@ export class List extends Block {
     processSelectEvent(event) {
         const id = this._getClickedChildId(event);
 
-        if(id === this.active) return;
+        if(!id || id === this.active) return;
         if(this.active) {
             this.children[this.active].toggleActive();
         }
@@ -39,8 +39,8 @@ export class List extends Block {
     }
 
     _getClickedChildId(event) {
-        console.log('@ITEM CLICK:', event)
-        const id = event.target.parentElement.attributes.key.value;
+        const id = event.target.parentElement.attributes.key?.value;
+        if(!id) return; 
         return id;
     }
 
